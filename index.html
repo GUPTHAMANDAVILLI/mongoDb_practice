@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Login page</title>
+        <style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700;500&family=JetBrains+Mono:wght@400;700&display=swap');
+ 
+:root{
+  --ink:#111111;
+  --paper:#EDE9DE;
+  --volt:#D4FF3F;
+  --alert:#FF4B2B;
+}
+ 
+*{box-sizing:border-box;}
+ 
+@keyframes stripe-move{
+  from{background-position:0 0;}
+  to{background-position:56px 0;}
+}
+@keyframes pop-in{
+  0%{transform:translateY(24px) rotate(-1.5deg);opacity:0;}
+  100%{transform:translateY(0) rotate(-1.5deg);opacity:1;}
+}
+@keyframes blink{
+  0%,49%{opacity:1;}
+  50%,100%{opacity:0;}
+}
+@keyframes shake{
+  0%,100%{transform:translate(0,0);}
+  25%{transform:translate(2px,-2px);}
+  75%{transform:translate(-2px,2px);}
+}
+ 
+body{
+  margin:0;
+  min-height:100vh;
+  min-height:100dvh;
+  background:var(--ink);
+  background-image:repeating-linear-gradient(45deg, #1c1c1c 0 14px, #111111 14px 28px);
+  animation:stripe-move 3.5s linear infinite;
+  font-family:'JetBrains Mono',monospace;
+  color:var(--ink);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+}
+ 
+h1{
+  font-family:'Space Grotesk',sans-serif;
+  font-weight:700;
+  font-size:clamp(26px, 6vw, 38px);
+  text-transform:uppercase;
+  letter-spacing:-0.5px;
+  line-height:0.95;
+  background:var(--volt);
+  color:var(--ink);
+  border:4px solid var(--ink);
+  padding:16px 20px;
+  box-shadow:9px 9px 0 var(--alert);
+  max-width:380px;
+  width:100%;
+  margin:0 0 30px;
+  text-align:center;
+  position:relative;
+  animation:pop-in .5s cubic-bezier(.2,.9,.3,1.3) both;
+}
+ 
+h1::after{
+  content:"_";
+  animation:blink 1s steps(1) infinite;
+  color:var(--alert);
+}
+ 
+input{
+  display:block;
+  width:100%;
+  max-width:380px;
+  border:3px solid var(--ink);
+  background:var(--paper);
+  padding:14px 12px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:16px;
+  color:var(--ink);
+  outline:none;
+  transform:rotate(-1.5deg);
+  animation:pop-in .5s cubic-bezier(.2,.9,.3,1.3) both;
+  animation-delay:.08s;
+  transition:box-shadow .15s ease, transform .15s ease, background .15s ease;
+}
+ 
+input:nth-of-type(2){animation-delay:.16s;}
+ 
+input:hover{
+  transform:rotate(0deg) translateY(-2px);
+}
+ 
+input:focus{
+  background:#fff;
+  transform:rotate(0deg);
+  box-shadow:6px 6px 0 var(--volt);
+}
+ 
+button{
+  display:block;
+  width:100%;
+  max-width:380px;
+  padding:17px;
+  background:var(--alert);
+  color:var(--paper);
+  border:3px solid var(--ink);
+  font-family:'Space Grotesk',sans-serif;
+  font-weight:700;
+  font-size:17px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  cursor:pointer;
+  box-shadow:7px 7px 0 var(--volt);
+  transform:rotate(-1.5deg);
+  animation:pop-in .5s cubic-bezier(.2,.9,.3,1.3) both;
+  animation-delay:.24s;
+  transition:transform .1s ease, box-shadow .1s ease, background .1s ease, letter-spacing .15s ease;
+}
+ 
+button:hover{
+  transform:rotate(0deg) translateY(-3px);
+  letter-spacing:4px;
+  background:var(--ink);
+  box-shadow:9px 9px 0 var(--volt);
+}
+ 
+button:active{
+  animation:shake .25s ease;
+  transform:rotate(0deg) translate(5px,5px);
+  box-shadow:0 0 0 var(--volt);
+}
+ 
+@media (max-width:480px){
+  h1{box-shadow:6px 6px 0 var(--alert);}
+  button{box-shadow:5px 5px 0 var(--volt);}
+}
+ 
+@media (prefers-reduced-motion: reduce){
+  *{animation:none !important; transition:none !important;}
+  body{background-image:none;}
+}
+</style>
+    </head>
+    <body>
+        <h1>Login Page</h1>
+        <input type="text" id="username" placeholder="Username"><br><br>
+        <input type="text" id="password" placeholder="Password"><br><br>
+        <button id="btn">Login</button>
+
+        <script>
+            const btn = document.getElementById('btn')
+            btn.addEventListener('click',async()=>{
+                const username = document.getElementById('username').value
+                const password = document.getElementById('password').value
+                const userData ={
+                    username,
+                    password
+                }
+                const response = await fetch('http://localhost:5000/login',{
+                    method : 'POST',
+                    headers:{
+                        'Content-Type':'application/json'
+                    },
+                    body : JSON.stringify(userData)
+                })
+                const result =await response.text()
+                console.log(result)
+            })
+        </script>
+    </body>
+</html>
